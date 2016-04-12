@@ -11,10 +11,10 @@
         android:layout_weight="1">
 
         <cn.gavinliu.android.lib.shapedimageview.ShapedImageView
+            android:id="@+id/image1"
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_centerInParent="true"
-            android:src="@drawable/soundtrack"
             app:round_radius="100dp"
             app:shape_mode="circle" />
     </RelativeLayout>
@@ -30,10 +30,10 @@
         android:layout_weight="1">
 
         <cn.gavinliu.android.lib.shapedimageview.ShapedImageView
+            android:id="@+id/image2"
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_centerInParent="true"
-            android:src="@drawable/soundtrack"
             app:round_radius="20dp"
             app:shape_mode="round_rect" />
     </RelativeLayout>
