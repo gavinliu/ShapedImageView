@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected Bitmap doInBackground(Void... params) {
-            return BitmapFactory.decodeResource(getResources(), R.drawable.soundtrack);
+            return BitmapFactory.decodeResource(getResources(), R.drawable.an);
         }
 
         @Override
