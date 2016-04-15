@@ -10,6 +10,12 @@
 
 ## Usage
 
+### dependencies
+
+```
+compile 'cn.gavinliu.android.lib:ShapedImageView:0.4'
+```
+
 ### attr
 
 ```xml
