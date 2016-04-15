@@ -6,7 +6,7 @@
 
 ## Screenhots
 
-![](/screenhots.png =320*480)
+![](/screenhots.png)
 
 ## Usage
 
