@@ -1,12 +1,12 @@
 # ShapedImageView
 
-* 不到****100****行代码
+* 简洁，不到***100***行代码
 * 支持``圆形`` ``圆角矩形``
-* 支``TransitionDrawable``
+* 支持``TransitionDrawable``
 
 ## Screenhots
 
-![](/screenhots.png)
+![](/screenhots.png =320*480)
 
 ## Usage
 
