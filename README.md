@@ -56,6 +56,10 @@ compile 'cn.gavinliu.android.lib:ShapedImageView:0.4'
     app:shape_mode="round_rect" />
 ```
 
+## TODO
+
+* Support Any Shape (SVG to PathShape)
+
 ## License
 
 MIT
