@@ -22,5 +22,6 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:23.3.0'
-    compile project(':library')
+//    compile 'cn.gavinliu.android.lib:library:0.2'
+    compile project(':ShapedImageView')
 }

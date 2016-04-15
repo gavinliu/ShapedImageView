@@ -1,0 +1,109 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
+
+    resourcePrefix "ShapedImageView-"
+
+    defaultConfig {
+        minSdkVersion 8
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+
+}
+
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+def siteUrl = 'https://github.com/gavinliu/ShapedImageView' // 项目的主页
+def gitUrl = 'https://github.com/gavinliu/ShapedImageView.git' // Git仓库的url
+
+version = "0.4"
+group = "cn.gavinliu.android.lib"
+
+install {
+    repositories.mavenInstaller {
+        pom {
+            project {
+                packaging 'aar'
+
+                //添加项目描述
+                name 'ShapedImageView'
+                url siteUrl
+
+                //设置开源证书信息
+                licenses {
+                    license {
+                        name 'The MIT License (MIT)'
+                        url 'http://mit-license.org/'
+                    }
+                }
+                //添加开发者信息
+                developers {
+                    developer {
+                        id 'gavin6liu'
+                        name 'Gavin.Liu'
+                        email 'gavin6liu@gmail.com'
+                    }
+                }
+
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+    configurations = ['archives']
+
+    pkg {
+        repo = "maven"//上传的中央仓库名称
+        name = "ShapedImageView"//上传的项目的名字
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = ["MIT"]
+        publish = true  //是否发布
+    }
+}
