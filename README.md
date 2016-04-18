@@ -13,7 +13,7 @@
 ### dependencies
 
 ```
-compile 'cn.gavinliu.android.lib:ShapedImageView:0.4'
+compile 'cn.gavinliu.android.lib:ShapedImageView:0.5'
 ```
 
 ### attr
