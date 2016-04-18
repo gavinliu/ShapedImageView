@@ -15,7 +15,9 @@
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_centerInParent="true"
-            app:shape_mode="circle" />
+            app:shape_mode="circle"
+            app:stroke_color="#009688"
+            app:stroke_width="3dp" />
     </RelativeLayout>
 
     <View
@@ -34,7 +36,9 @@
             android:layout_height="200dp"
             android:layout_centerInParent="true"
             app:round_radius="20dp"
-            app:shape_mode="round_rect" />
+            app:shape_mode="round_rect"
+            app:stroke_color="#009688"
+            app:stroke_width="3dp" />
     </RelativeLayout>
 
 </LinearLayout>

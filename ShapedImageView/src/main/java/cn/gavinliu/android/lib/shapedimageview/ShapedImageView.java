@@ -2,11 +2,13 @@ package cn.gavinliu.android.lib.shapedimageview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.RectF;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.graphics.drawable.shapes.Shape;
 import android.os.Build;
@@ -20,10 +22,16 @@ public class ShapedImageView extends ImageView {
     private static final int SHAPE_MODE_ROUND_RECT = 1;
     private static final int SHAPE_MODE_CIRCLE = 2;
 
+    private static final int LAYER_FLAGS = Canvas.MATRIX_SAVE_FLAG | Canvas.CLIP_SAVE_FLAG | Canvas.HAS_ALPHA_LAYER_SAVE_FLAG | Canvas.FULL_COLOR_LAYER_SAVE_FLAG | Canvas.CLIP_TO_LAYER_SAVE_FLAG;
+
     private int mShapeMode = 0;
     private float mRadius = 0;
-    private Shape mShape;
-    private Paint mPaint;
+    private int mStrokeColor = 0x26000000;
+    private float mStrokeWidth = 0;
+
+    private Shape mShape, mStrokeShape;
+    private Paint mPaint, mStrokePaint;
+    private Bitmap mStrokeBitmap;
 
     public ShapedImageView(Context context) {
         super(context);
@@ -48,13 +56,18 @@ public class ShapedImageView extends ImageView {
             TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ShapedImageView);
             mShapeMode = a.getInt(R.styleable.ShapedImageView_shape_mode, 0);
             mRadius = a.getDimension(R.styleable.ShapedImageView_round_radius, 0);
+
+            mStrokeWidth = a.getDimension(R.styleable.ShapedImageView_stroke_width, 0);
+            mStrokeColor = a.getColor(R.styleable.ShapedImageView_stroke_color, mStrokeColor);
             a.recycle();
         }
-        mPaint = new Paint();
-        mPaint.setAntiAlias(true);
+        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setFilterBitmap(true);
         mPaint.setColor(Color.BLACK);
         mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+
+        mStrokePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mStrokePaint.setColor(mStrokeColor);
     }
 
     @Override
@@ -73,16 +86,30 @@ public class ShapedImageView extends ImageView {
                 float[] radius = new float[8];
                 Arrays.fill(radius, mRadius);
                 mShape = new RoundRectShape(radius, null, null);
+                mStrokeShape = new RoundRectShape(radius, null, null);
             }
             mShape.resize(getWidth(), getHeight());
+            if (mStrokeWidth > 0) {
+                mStrokeBitmap = makeStrokeBitmap(getWidth(), getHeight());
+                mStrokeShape.resize(getWidth() - mStrokeWidth * 2, getHeight() - mStrokeWidth * 2);
+            }
         }
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        int saveCount = canvas.getSaveCount();
-        canvas.save();
         super.onDraw(canvas);
+
+        if (mStrokeWidth > 0 && mStrokeShape != null && mStrokeBitmap != null) {
+            int i = canvas.saveLayer(0, 0, getWidth(), getHeight(), null, LAYER_FLAGS);
+            canvas.drawBitmap(mStrokeBitmap, 0, 0, mStrokePaint);
+            canvas.translate(mStrokeWidth, mStrokeWidth);
+            mStrokePaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
+            mStrokeShape.draw(canvas, mStrokePaint);
+            mStrokePaint.setXfermode(null);
+            canvas.restoreToCount(i);
+        }
+
         switch (mShapeMode) {
             case SHAPE_MODE_ROUND_RECT:
             case SHAPE_MODE_CIRCLE:
@@ -91,6 +118,15 @@ public class ShapedImageView extends ImageView {
                 }
                 break;
         }
-        canvas.restoreToCount(saveCount);
     }
+
+    private Bitmap makeStrokeBitmap(int w, int h) {
+        Bitmap bm = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(bm);
+        Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+        p.setColor(mStrokeColor);
+        c.drawRect(new RectF(0, 0, w, h), p);
+        return bm;
+    }
+
 }
