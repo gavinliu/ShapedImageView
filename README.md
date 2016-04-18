@@ -1,7 +1,7 @@
 # ShapedImageView
 
-* 简洁，不到***100***行代码
 * 支持``圆形`` ``圆角矩形``
+* 支持``显示边框``
 * 支持``TransitionDrawable``
 
 ## Screenhots
@@ -28,6 +28,9 @@ compile 'cn.gavinliu.android.lib:ShapedImageView:0.4'
             <enum name="circle" value="2" />
         </attr>
         <attr name="round_radius" format="dimension" />
+
+        <attr name="stroke_width" format="dimension" />
+        <attr name="stroke_color" format="color|reference" />
     </declare-styleable>
 
 </resources>
@@ -41,7 +44,9 @@ compile 'cn.gavinliu.android.lib:ShapedImageView:0.4'
     android:layout_width="200dp"
     android:layout_height="200dp"
     android:layout_centerInParent="true"
-    app:shape_mode="circle" />
+    app:shape_mode="circle"
+    app:stroke_color="#009688"
+    app:stroke_width="3dp" />
 ```
 
 ### Round Rect
@@ -53,7 +58,9 @@ compile 'cn.gavinliu.android.lib:ShapedImageView:0.4'
     android:layout_height="200dp"
     android:layout_centerInParent="true"
     app:round_radius="20dp"
-    app:shape_mode="round_rect" />
+    app:shape_mode="round_rect"
+    app:stroke_color="#009688"
+    app:stroke_width="3dp" />
 ```
 
 ## TODO
