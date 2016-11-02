@@ -3,10 +3,11 @@
 * 支持``圆形`` ``圆角矩形``
 * 支持``显示边框``
 * 支持``TransitionDrawable``
+* ***New*** **支持自定义Path扩展**
 
-## Screenhots
+## Screenshots
 
-![](/screenhots.png)
+![](/screenshots1.png) ![](/screenshots2.png)
 
 ## Usage
 

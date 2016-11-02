@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cn.gavinliu.android.lib.shapedimageview.demo">
+          package="cn.gavinliu.android.lib.shapedimageview.demo">
 
     <application
         android:allowBackup="false"
@@ -12,11 +12,20 @@
             android:name=".MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".DemoActivity"
+            android:label="Demo"/>
+
+        <activity
+            android:name=".ExtensionDemoActivity"
+            android:label="Extension Path Demo"/>
+
     </application>
 
 </manifest>

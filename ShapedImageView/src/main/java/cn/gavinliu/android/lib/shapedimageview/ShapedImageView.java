@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
@@ -29,9 +30,12 @@ public class ShapedImageView extends ImageView {
     private int mStrokeColor = 0x26000000;
     private float mStrokeWidth = 0;
 
+    private Path mPath;
     private Shape mShape, mStrokeShape;
-    private Paint mPaint, mStrokePaint;
+    private Paint mPaint, mStrokePaint, mPathPaint;
     private Bitmap mStrokeBitmap;
+
+    private PathExtension mExtension;
 
     public ShapedImageView(Context context) {
         super(context);
@@ -67,7 +71,15 @@ public class ShapedImageView extends ImageView {
         mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
 
         mStrokePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mStrokePaint.setFilterBitmap(true);
         mStrokePaint.setColor(mStrokeColor);
+
+        mPathPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPathPaint.setFilterBitmap(true);
+        mPathPaint.setColor(Color.BLACK);
+        mPathPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.XOR));
+
+        mPath = new Path();
     }
 
     @Override
@@ -82,6 +94,7 @@ public class ShapedImageView extends ImageView {
                     mRadius = (float) min / 2;
                     break;
             }
+
             if (mShape == null) {
                 float[] radius = new float[8];
                 Arrays.fill(radius, mRadius);
@@ -89,9 +102,14 @@ public class ShapedImageView extends ImageView {
                 mStrokeShape = new RoundRectShape(radius, null, null);
             }
             mShape.resize(getWidth(), getHeight());
+
             if (mStrokeWidth > 0) {
                 mStrokeBitmap = makeStrokeBitmap(getWidth(), getHeight());
                 mStrokeShape.resize(getWidth() - mStrokeWidth * 2, getHeight() - mStrokeWidth * 2);
+            }
+
+            if (mExtension != null) {
+                mExtension.onLayout(mPath, getWidth(), getHeight());
             }
         }
     }
@@ -102,12 +120,16 @@ public class ShapedImageView extends ImageView {
 
         if (mStrokeWidth > 0 && mStrokeShape != null && mStrokeBitmap != null) {
             int i = canvas.saveLayer(0, 0, getWidth(), getHeight(), null, LAYER_FLAGS);
+            mStrokePaint.setXfermode(null);
             canvas.drawBitmap(mStrokeBitmap, 0, 0, mStrokePaint);
             canvas.translate(mStrokeWidth, mStrokeWidth);
             mStrokePaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
             mStrokeShape.draw(canvas, mStrokePaint);
-            mStrokePaint.setXfermode(null);
             canvas.restoreToCount(i);
+        }
+
+        if (mExtension != null) {
+            canvas.drawPath(mPath, mPathPaint);
         }
 
         switch (mShapeMode) {
@@ -120,6 +142,15 @@ public class ShapedImageView extends ImageView {
         }
     }
 
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (mStrokeBitmap != null) {
+            mStrokeBitmap.recycle();
+            mStrokeBitmap = null;
+        }
+    }
+
     private Bitmap makeStrokeBitmap(int w, int h) {
         Bitmap bm = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(bm);
@@ -127,6 +158,15 @@ public class ShapedImageView extends ImageView {
         p.setColor(mStrokeColor);
         c.drawRect(new RectF(0, 0, w, h), p);
         return bm;
+    }
+
+    public void setExtension(PathExtension extension) {
+        mExtension = extension;
+        requestLayout();
+    }
+
+    public interface PathExtension {
+        void onLayout(Path path, int width, int height);
     }
 
 }
