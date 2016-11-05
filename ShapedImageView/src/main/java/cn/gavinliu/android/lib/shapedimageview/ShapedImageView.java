@@ -102,10 +102,10 @@ public class ShapedImageView extends ImageView {
                 mStrokeShape = new RoundRectShape(radius, null, null);
             }
             mShape.resize(getWidth(), getHeight());
+            mStrokeShape.resize(getWidth() - mStrokeWidth * 2, getHeight() - mStrokeWidth * 2);
 
-            if (mStrokeWidth > 0) {
+            if (mStrokeWidth > 0 && mStrokeBitmap == null) {
                 mStrokeBitmap = makeStrokeBitmap(getWidth(), getHeight());
-                mStrokeShape.resize(getWidth() - mStrokeWidth * 2, getHeight() - mStrokeWidth * 2);
             }
 
             if (mExtension != null) {
@@ -139,6 +139,14 @@ public class ShapedImageView extends ImageView {
                     mShape.draw(canvas, mPaint);
                 }
                 break;
+        }
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (mStrokeWidth > 0 && mStrokeBitmap == null && mStrokeShape != null) {
+            mStrokeBitmap = makeStrokeBitmap(getWidth(), getHeight());
         }
     }
 

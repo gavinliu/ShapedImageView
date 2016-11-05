@@ -10,4 +10,6 @@
     <dimen name="small_circle_r">2dp</dimen>
     <dimen name="small_circle_spacing">10dp</dimen>
 
+    <dimen name="image_size">100dp</dimen>
+
 </resources>

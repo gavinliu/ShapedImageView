@@ -24,13 +24,13 @@ public class ExtensionDemoActivity extends AppCompatActivity {
         image2 = (ShapedImageView) findViewById(R.id.image2);
         image3 = (ShapedImageView) findViewById(R.id.image3);
 
-        image1.setExtension(new CDTicketPathExtension());
+        image1.setExtension(new CDPathExtension());
         image2.setExtension(new TicketPathExtension(false));
         image3.setExtension(new TicketPathExtension(true));
 
     }
 
-    class CDTicketPathExtension implements ShapedImageView.PathExtension {
+    class CDPathExtension implements ShapedImageView.PathExtension {
 
         @Override
         public void onLayout(Path path, int width, int height) {

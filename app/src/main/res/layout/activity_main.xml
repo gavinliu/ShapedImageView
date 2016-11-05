@@ -18,4 +18,11 @@
         android:layout_height="wrap_content"
         android:text="Extension Path Demo"/>
 
+    <Button
+        android:onClick="recycler"
+        android:id="@+id/recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="RecyclerView Demo"/>
+
 </LinearLayout>
