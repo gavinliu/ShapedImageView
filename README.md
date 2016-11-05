@@ -14,7 +14,7 @@
 ### dependencies
 
 ```
-compile 'cn.gavinliu.android.lib:ShapedImageView:0.5'
+compile 'cn.gavinliu.android.lib:ShapedImageView:0.8.1'
 ```
 
 ### Circle
@@ -44,9 +44,9 @@ compile 'cn.gavinliu.android.lib:ShapedImageView:0.5'
 
 ```java
 
-image1.setExtension(new CDTicketPathExtension());
+image1.setExtension(new CDPathExtension());
 
-class CDTicketPathExtension implements ShapedImageView.PathExtension {
+class CDPathExtension implements ShapedImageView.PathExtension {
 
     @Override
     public void onLayout(Path path, int width, int height) {
