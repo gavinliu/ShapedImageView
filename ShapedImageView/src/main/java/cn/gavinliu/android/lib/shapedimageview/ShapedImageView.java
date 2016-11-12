@@ -77,7 +77,7 @@ public class ShapedImageView extends ImageView {
         mPathPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPathPaint.setFilterBitmap(true);
         mPathPaint.setColor(Color.BLACK);
-        mPathPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.XOR));
+        mPathPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
 
         mPath = new Path();
     }
