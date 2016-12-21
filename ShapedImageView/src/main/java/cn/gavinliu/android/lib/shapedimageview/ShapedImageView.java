@@ -86,30 +86,33 @@ public class ShapedImageView extends ImageView {
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         if (changed) {
+            int width = getMeasuredWidth();
+            int height = getMeasuredHeight();
+
             switch (mShapeMode) {
                 case SHAPE_MODE_ROUND_RECT:
                     break;
                 case SHAPE_MODE_CIRCLE:
-                    int min = Math.min(getWidth(), getHeight());
+                    int min = Math.min(width, height);
                     mRadius = (float) min / 2;
                     break;
             }
 
-            if (mShape == null) {
+            if (mShape == null || mRadius != 0) {
                 float[] radius = new float[8];
                 Arrays.fill(radius, mRadius);
                 mShape = new RoundRectShape(radius, null, null);
                 mStrokeShape = new RoundRectShape(radius, null, null);
             }
-            mShape.resize(getWidth(), getHeight());
-            mStrokeShape.resize(getWidth() - mStrokeWidth * 2, getHeight() - mStrokeWidth * 2);
+            mShape.resize(width, height);
+            mStrokeShape.resize(width - mStrokeWidth * 2, height - mStrokeWidth * 2);
 
             if (mStrokeWidth > 0 && mStrokeBitmap == null) {
-                mStrokeBitmap = makeStrokeBitmap(getWidth(), getHeight());
+                mStrokeBitmap = makeStrokeBitmap(width, height);
             }
 
             if (mExtension != null) {
-                mExtension.onLayout(mPath, getWidth(), getHeight());
+                mExtension.onLayout(mPath, width, height);
             }
         }
     }
@@ -119,7 +122,7 @@ public class ShapedImageView extends ImageView {
         super.onDraw(canvas);
 
         if (mStrokeWidth > 0 && mStrokeShape != null && mStrokeBitmap != null) {
-            int i = canvas.saveLayer(0, 0, getWidth(), getHeight(), null, LAYER_FLAGS);
+            int i = canvas.saveLayer(0, 0, getMeasuredHeight(), getMeasuredHeight(), null, LAYER_FLAGS);
             mStrokePaint.setXfermode(null);
             canvas.drawBitmap(mStrokeBitmap, 0, 0, mStrokePaint);
             canvas.translate(mStrokeWidth, mStrokeWidth);
@@ -146,7 +149,7 @@ public class ShapedImageView extends ImageView {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         if (mStrokeWidth > 0 && mStrokeBitmap == null && mStrokeShape != null) {
-            mStrokeBitmap = makeStrokeBitmap(getWidth(), getHeight());
+            mStrokeBitmap = makeStrokeBitmap(getMeasuredHeight(), getMeasuredHeight());
         }
     }
 
@@ -160,6 +163,7 @@ public class ShapedImageView extends ImageView {
     }
 
     private Bitmap makeStrokeBitmap(int w, int h) {
+        if (w == 0 || h == 0) return null;
         Bitmap bm = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(bm);
         Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
