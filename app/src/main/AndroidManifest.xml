@@ -28,8 +28,13 @@
             android:name=".ExtensionDemoActivity"
             android:label="Extension Path Demo"/>
 
-        <activity android:name=".ListActivity"
+        <activity
+            android:name=".ListActivity"
             android:label="RecyclerView Demo"/>
+
+        <activity
+            android:name=".SettingActivity"
+            android:label="Setting API"/>
 
     </application>
 

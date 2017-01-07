@@ -28,4 +28,9 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void set(View view) {
+        Intent intent = new Intent(this, SettingActivity.class);
+        startActivity(intent);
+    }
+
 }

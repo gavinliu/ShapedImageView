@@ -20,8 +20,8 @@ import java.util.Arrays;
 
 public class ShapedImageView extends ImageView {
 
-    private static final int SHAPE_MODE_ROUND_RECT = 1;
-    private static final int SHAPE_MODE_CIRCLE = 2;
+    public static final int SHAPE_MODE_ROUND_RECT = 1;
+    public static final int SHAPE_MODE_CIRCLE = 2;
 
     private static final int LAYER_FLAGS = Canvas.MATRIX_SAVE_FLAG | Canvas.CLIP_SAVE_FLAG | Canvas.HAS_ALPHA_LAYER_SAVE_FLAG | Canvas.FULL_COLOR_LAYER_SAVE_FLAG | Canvas.CLIP_TO_LAYER_SAVE_FLAG;
 
@@ -29,6 +29,7 @@ public class ShapedImageView extends ImageView {
     private float mRadius = 0;
     private int mStrokeColor = 0x26000000;
     private float mStrokeWidth = 0;
+    private boolean mShapeChanged;
 
     private Path mPath;
     private Shape mShape, mStrokeShape;
@@ -72,7 +73,7 @@ public class ShapedImageView extends ImageView {
 
         mStrokePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mStrokePaint.setFilterBitmap(true);
-        mStrokePaint.setColor(mStrokeColor);
+        mStrokePaint.setColor(Color.BLACK);
 
         mPathPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPathPaint.setFilterBitmap(true);
@@ -85,7 +86,9 @@ public class ShapedImageView extends ImageView {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-        if (changed) {
+        if (changed || mShapeChanged) {
+            mShapeChanged = false;
+
             int width = getMeasuredWidth();
             int height = getMeasuredHeight();
 
@@ -107,9 +110,7 @@ public class ShapedImageView extends ImageView {
             mShape.resize(width, height);
             mStrokeShape.resize(width - mStrokeWidth * 2, height - mStrokeWidth * 2);
 
-            if (mStrokeWidth > 0 && mStrokeBitmap == null) {
-                mStrokeBitmap = makeStrokeBitmap(width, height);
-            }
+            makeStrokeBitmap();
 
             if (mExtension != null) {
                 mExtension.onLayout(mPath, width, height);
@@ -148,33 +149,93 @@ public class ShapedImageView extends ImageView {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        if (mStrokeWidth > 0 && mStrokeBitmap == null && mStrokeShape != null) {
-            mStrokeBitmap = makeStrokeBitmap(getMeasuredHeight(), getMeasuredHeight());
-        }
+        if (mStrokeBitmap == null) makeStrokeBitmap();
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        releaseStrokeBitmap();
+    }
+
+    private Bitmap makeStrokeBitmap() {
+        if (mStrokeWidth <= 0) return null;
+
+        int w = getMeasuredWidth();
+        int h = getMeasuredHeight();
+
+        if (w == 0 || h == 0) return null;
+
+        releaseStrokeBitmap();
+
+        mStrokeBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(mStrokeBitmap);
+        Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+        p.setColor(mStrokeColor);
+        c.drawRect(new RectF(0, 0, w, h), p);
+        return mStrokeBitmap;
+    }
+
+    private void releaseStrokeBitmap() {
         if (mStrokeBitmap != null) {
             mStrokeBitmap.recycle();
             mStrokeBitmap = null;
         }
     }
 
-    private Bitmap makeStrokeBitmap(int w, int h) {
-        if (w == 0 || h == 0) return null;
-        Bitmap bm = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-        Canvas c = new Canvas(bm);
-        Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
-        p.setColor(mStrokeColor);
-        c.drawRect(new RectF(0, 0, w, h), p);
-        return bm;
-    }
-
     public void setExtension(PathExtension extension) {
         mExtension = extension;
         requestLayout();
+    }
+
+    public void setStroke(int strokeColor, float strokeWidth) {
+        if (mStrokeWidth <= 0) return;
+
+        if (mStrokeWidth != strokeWidth) {
+            mStrokeWidth = strokeWidth;
+
+            int width = getMeasuredWidth();
+            int height = getMeasuredHeight();
+            mStrokeShape.resize(width - mStrokeWidth * 2, height - mStrokeWidth * 2);
+
+            postInvalidate();
+        }
+
+        if (mStrokeColor != strokeColor) {
+            mStrokeColor = strokeColor;
+
+            makeStrokeBitmap();
+            postInvalidate();
+        }
+    }
+
+    public void setStrokeColor(int strokeColor) {
+        setStroke(strokeColor, mStrokeWidth);
+    }
+
+    public void setStrokeWidth(float strokeWidth) {
+        setStroke(mStrokeColor, strokeWidth);
+    }
+
+    public void setShape(int shapeMode, float radius) {
+        mShapeChanged = mShapeMode != shapeMode || mRadius != radius;
+
+        if (mShapeChanged) {
+            mShapeMode = shapeMode;
+            mRadius = radius;
+
+            mShape = null;
+            mStrokeShape = null;
+            requestLayout();
+        }
+    }
+
+    public void setShapeMode(int shapeMode) {
+        setShape(shapeMode, mRadius);
+    }
+
+    public void setShapeRadius(float radius) {
+        setShape(mShapeMode, radius);
     }
 
     public interface PathExtension {

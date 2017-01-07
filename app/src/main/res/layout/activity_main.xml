@@ -25,4 +25,11 @@
         android:layout_height="wrap_content"
         android:text="RecyclerView Demo"/>
 
+    <Button
+        android:onClick="set"
+        android:id="@+id/set"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Set Demo"/>
+
 </LinearLayout>
