@@ -9,8 +9,8 @@ android {
     defaultConfig {
         minSdkVersion 8
         targetSdkVersion 23
-        versionCode 6
-        versionName "0.8.3"
+        versionCode 7
+        versionName "0.8.4"
     }
     buildTypes {
         release {
@@ -30,7 +30,7 @@ apply plugin: 'com.jfrog.bintray'
 def siteUrl = 'https://github.com/gavinliu/ShapedImageView' // 项目的主页
 def gitUrl = 'https://github.com/gavinliu/ShapedImageView.git' // Git仓库的url
 
-version = "0.8.3"
+version = "0.8.4"
 group = "cn.gavinliu.android.lib"
 
 install {

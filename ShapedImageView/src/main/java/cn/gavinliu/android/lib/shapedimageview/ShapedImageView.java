@@ -123,7 +123,7 @@ public class ShapedImageView extends ImageView {
         super.onDraw(canvas);
 
         if (mStrokeWidth > 0 && mStrokeShape != null && mStrokeBitmap != null) {
-            int i = canvas.saveLayer(0, 0, getMeasuredHeight(), getMeasuredHeight(), null, LAYER_FLAGS);
+            int i = canvas.saveLayer(0, 0, getMeasuredWidth(), getMeasuredHeight(), null, LAYER_FLAGS);
             mStrokePaint.setXfermode(null);
             canvas.drawBitmap(mStrokeBitmap, 0, 0, mStrokePaint);
             canvas.translate(mStrokeWidth, mStrokeWidth);
