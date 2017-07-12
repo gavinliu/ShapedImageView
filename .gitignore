@@ -65,5 +65,3 @@ proguard/
 
 gradle.properties
 gradle/
-gradlew
-gradlew.bat
