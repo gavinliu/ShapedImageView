@@ -1,5 +1,7 @@
 # ShapedImageView
 
+[![CircleCI](https://circleci.com/gh/gavinliu/ShapedImageView/tree/master.svg?style=svg)](https://circleci.com/gh/gavinliu/ShapedImageView/tree/master)
+
 * Support ``circle`` & ``round rect`` shaped
 * Support ``stroke``
 * Support ``TransitionDrawable``
