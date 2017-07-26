@@ -12,11 +12,16 @@ android {
         versionCode 7
         versionName "0.8.4"
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles 'proguard-rules.pro'
         }
+    }
+
+    lintOptions {
+        abortOnError false
     }
 }
 
