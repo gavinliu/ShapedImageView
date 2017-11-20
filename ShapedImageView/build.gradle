@@ -4,13 +4,13 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
 
-    resourcePrefix "ShapedImageView-"
+//    resourcePrefix "ShapedImageView-"
 
     defaultConfig {
         minSdkVersion 9
         targetSdkVersion 25
-        versionCode 7
-        versionName "0.8.4"
+        versionCode 85
+        versionName "0.8.5"
     }
 
     buildTypes {
@@ -35,7 +35,7 @@ apply plugin: 'com.jfrog.bintray'
 def siteUrl = 'https://github.com/gavinliu/ShapedImageView' // 项目的主页
 def gitUrl = 'https://github.com/gavinliu/ShapedImageView.git' // Git仓库的url
 
-version = "0.8.4"
+version = "0.8.5"
 group = "cn.gavinliu.android.lib"
 
 install {
