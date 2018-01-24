@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/code
     docker:
-      - image: lakoo/android-ndk:25-25.0.3-r14b
+      - image: lakoo/android-ndk:26-26.0.2-r15c
     environment:
       JVM_OPTS: -Xmx3200m
     steps:

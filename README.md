@@ -16,7 +16,7 @@
 ### dependencies
 
 ```
-compile 'cn.gavinliu.android.lib:ShapedImageView:0.8.4'
+compile 'cn.gavinliu.android.lib:ShapedImageView:0.8.5'
 ```
 
 ### Circle
