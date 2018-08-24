@@ -12,7 +12,6 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.graphics.drawable.shapes.Shape;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
@@ -23,8 +22,6 @@ public class ShapedImageView extends ImageView {
     public static final int SHAPE_MODE_ROUND_RECT = 1;
     public static final int SHAPE_MODE_CIRCLE = 2;
 
-    private static final int LAYER_FLAGS = Canvas.MATRIX_SAVE_FLAG | Canvas.CLIP_SAVE_FLAG | Canvas.HAS_ALPHA_LAYER_SAVE_FLAG | Canvas.FULL_COLOR_LAYER_SAVE_FLAG | Canvas.CLIP_TO_LAYER_SAVE_FLAG;
-
     private int mShapeMode = 0;
     private float mRadius = 0;
     private int mStrokeColor = 0x26000000;
@@ -34,9 +31,12 @@ public class ShapedImageView extends ImageView {
     private Path mPath;
     private Shape mShape, mStrokeShape;
     private Paint mPaint, mStrokePaint, mPathPaint;
-    private Bitmap mStrokeBitmap;
+    private Bitmap mShapeBitmap, mStrokeBitmap;
 
     private PathExtension mExtension;
+
+    private PorterDuffXfermode DST_IN = new PorterDuffXfermode(PorterDuff.Mode.DST_IN);
+    private PorterDuffXfermode DST_OUT = new PorterDuffXfermode(PorterDuff.Mode.DST_OUT);
 
     public ShapedImageView(Context context) {
         super(context);
@@ -54,9 +54,7 @@ public class ShapedImageView extends ImageView {
     }
 
     private void init(AttributeSet attrs) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            setLayerType(LAYER_TYPE_HARDWARE, null);
-        }
+        setLayerType(LAYER_TYPE_HARDWARE, null);
         if (attrs != null) {
             TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ShapedImageView);
             mShapeMode = a.getInt(R.styleable.ShapedImageView_shape_mode, 0);
@@ -69,7 +67,7 @@ public class ShapedImageView extends ImageView {
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setFilterBitmap(true);
         mPaint.setColor(Color.BLACK);
-        mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+        mPaint.setXfermode(DST_IN);
 
         mStrokePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mStrokePaint.setFilterBitmap(true);
@@ -78,7 +76,7 @@ public class ShapedImageView extends ImageView {
         mPathPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPathPaint.setFilterBitmap(true);
         mPathPaint.setColor(Color.BLACK);
-        mPathPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
+        mPathPaint.setXfermode(DST_OUT);
 
         mPath = new Path();
     }
@@ -111,6 +109,7 @@ public class ShapedImageView extends ImageView {
             mStrokeShape.resize(width - mStrokeWidth * 2, height - mStrokeWidth * 2);
 
             makeStrokeBitmap();
+            makeShapeBitmap();
 
             if (mExtension != null) {
                 mExtension.onLayout(mPath, width, height);
@@ -122,12 +121,15 @@ public class ShapedImageView extends ImageView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if (mStrokeWidth > 0 && mStrokeShape != null && mStrokeBitmap != null) {
-            int i = canvas.saveLayer(0, 0, getMeasuredWidth(), getMeasuredHeight(), null, LAYER_FLAGS);
+        if (mStrokeWidth > 0 && mStrokeShape != null) {
+            if (mStrokeBitmap == null || mStrokeBitmap.isRecycled()) {
+                makeStrokeBitmap();
+            }
+            int i = canvas.saveLayer(0, 0, getMeasuredWidth(), getMeasuredHeight(), null, Canvas.ALL_SAVE_FLAG);
             mStrokePaint.setXfermode(null);
             canvas.drawBitmap(mStrokeBitmap, 0, 0, mStrokePaint);
             canvas.translate(mStrokeWidth, mStrokeWidth);
-            mStrokePaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
+            mStrokePaint.setXfermode(DST_OUT);
             mStrokeShape.draw(canvas, mStrokePaint);
             canvas.restoreToCount(i);
         }
@@ -139,48 +141,57 @@ public class ShapedImageView extends ImageView {
         switch (mShapeMode) {
             case SHAPE_MODE_ROUND_RECT:
             case SHAPE_MODE_CIRCLE:
-                if (mShape != null) {
-                    mShape.draw(canvas, mPaint);
+                if (mShapeBitmap == null || mShapeBitmap.isRecycled()) {
+                    makeShapeBitmap();
                 }
+                canvas.drawBitmap(mShapeBitmap, 0, 0, mPaint);
                 break;
         }
     }
 
     @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        if (mStrokeBitmap == null) makeStrokeBitmap();
-    }
-
-    @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        releaseStrokeBitmap();
+        releaseBitmap(mShapeBitmap);
+        releaseBitmap(mStrokeBitmap);
     }
 
-    private Bitmap makeStrokeBitmap() {
-        if (mStrokeWidth <= 0) return null;
+    private void makeStrokeBitmap() {
+        if (mStrokeWidth <= 0) return;
 
         int w = getMeasuredWidth();
         int h = getMeasuredHeight();
 
-        if (w == 0 || h == 0) return null;
+        if (w == 0 || h == 0) return;
 
-        releaseStrokeBitmap();
+        releaseBitmap(mStrokeBitmap);
 
         mStrokeBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(mStrokeBitmap);
         Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
         p.setColor(mStrokeColor);
         c.drawRect(new RectF(0, 0, w, h), p);
-        return mStrokeBitmap;
     }
 
-    private void releaseStrokeBitmap() {
-        if (mStrokeBitmap != null) {
-            mStrokeBitmap.recycle();
-            mStrokeBitmap = null;
+    private void releaseBitmap(Bitmap bitmap) {
+        if (bitmap != null && !bitmap.isRecycled()) {
+            bitmap.recycle();
         }
+    }
+
+    private void makeShapeBitmap() {
+        int w = getMeasuredWidth();
+        int h = getMeasuredHeight();
+
+        if (w == 0 || h == 0) return;
+
+        releaseBitmap(mShapeBitmap);
+
+        mShapeBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(mShapeBitmap);
+        Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+        p.setColor(Color.BLACK);
+        mShape.draw(c, p);
     }
 
     public void setExtension(PathExtension extension) {

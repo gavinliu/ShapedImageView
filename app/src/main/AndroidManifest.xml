@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="cn.gavinliu.android.lib.shapedimageview.demo">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="false"
@@ -14,27 +14,27 @@
             android:name=".MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <activity
             android:name=".DemoActivity"
-            android:label="Demo"/>
+            android:label="Demo" />
 
         <activity
             android:name=".ExtensionDemoActivity"
-            android:label="Extension Path Demo"/>
+            android:label="Extension Path Demo" />
 
         <activity
             android:name=".ListActivity"
-            android:label="RecyclerView Demo"/>
+            android:label="RecyclerView Demo" />
 
         <activity
             android:name=".SettingActivity"
-            android:label="Setting API"/>
+            android:label="Setting API" />
 
     </application>
 
