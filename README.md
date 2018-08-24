@@ -1,6 +1,6 @@
 # ShapedImageView
 
-[![CircleCI](https://circleci.com/gh/gavinliu/ShapedImageView/tree/master.svg?style=svg)](https://circleci.com/gh/gavinliu/ShapedImageView/tree/master)
+[![CircleCI](https://circleci.com/gh/gavinliu/ShapedImageView/tree/master.svg?style=svg)](https://circleci.com/gh/gavinliu/ShapedImageView/tree/master) [![](https://jitpack.io/v/cn.gavinliu/ShapedImageView.svg)](https://jitpack.io/#cn.gavinliu/ShapedImageView)
 
 * Support ``circle`` & ``round rect`` shaped
 * Support ``stroke``
@@ -15,8 +15,21 @@
 
 ### dependencies
 
+Step 1. Add the JitPack repository to your build file
+
 ```
-compile 'cn.gavinliu.android.lib:ShapedImageView:0.8.5'
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+
+```
+dependencies {
+    implementation 'cn.gavinliu:ShapedImageView:0.8.6'
+}
 ```
 
 ### Circle
