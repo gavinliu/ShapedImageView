@@ -22,7 +22,7 @@ public class ShapedImageView extends ImageView {
     public static final int SHAPE_MODE_ROUND_RECT = 1;
     public static final int SHAPE_MODE_CIRCLE = 2;
 
-    private int mShapeMode = 0;
+    private int mShapeMode = SHAPE_MODE_ROUND_RECT;
     private float mRadius = 0;
     private int mStrokeColor = 0x26000000;
     private float mStrokeWidth = 0;
@@ -57,7 +57,7 @@ public class ShapedImageView extends ImageView {
         setLayerType(LAYER_TYPE_HARDWARE, null);
         if (attrs != null) {
             TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ShapedImageView);
-            mShapeMode = a.getInt(R.styleable.ShapedImageView_shape_mode, 0);
+            mShapeMode = a.getInt(R.styleable.ShapedImageView_shape_mode, SHAPE_MODE_ROUND_RECT);
             mRadius = a.getDimension(R.styleable.ShapedImageView_round_radius, 0);
 
             mStrokeWidth = a.getDimension(R.styleable.ShapedImageView_stroke_width, 0);
@@ -119,6 +119,7 @@ public class ShapedImageView extends ImageView {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        int saveLayers = canvas.saveLayer(0, 0, getMeasuredWidth(), getMeasuredHeight(), null, Canvas.ALL_SAVE_FLAG);
         super.onDraw(canvas);
 
         if (mStrokeWidth > 0 && mStrokeShape != null) {
@@ -147,6 +148,7 @@ public class ShapedImageView extends ImageView {
                 canvas.drawBitmap(mShapeBitmap, 0, 0, mPaint);
                 break;
         }
+        canvas.restoreToCount(saveLayers);
     }
 
     @Override
@@ -190,7 +192,7 @@ public class ShapedImageView extends ImageView {
         mShapeBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(mShapeBitmap);
         Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
-        p.setColor(Color.BLACK);
+        p.setColor(Color.RED);
         mShape.draw(c, p);
     }
 
