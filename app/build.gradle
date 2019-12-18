@@ -29,6 +29,6 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:recyclerview-v7:27.1.1'
 //    implementation project(':ShapedImageView')
-    implementation 'cn.gavinliu:ShapedImageView:0.8.6'
+    implementation 'cn.gavinliu:ShapedImageView:0.8.7'
     implementation 'com.github.bumptech.glide:glide:3.8.0'
 }

@@ -30,7 +30,7 @@ Step 2. Add the dependency
 
 ```
 dependencies {
-    implementation 'cn.gavinliu:ShapedImageView:0.8.6'
+    implementation 'cn.gavinliu:ShapedImageView:0.8.7'
 }
 ```
 
