@@ -1,6 +1,6 @@
 # ShapedImageView
 
-[![CircleCI](https://circleci.com/gh/gavinliu/ShapedImageView/tree/master.svg?style=svg)](https://circleci.com/gh/gavinliu/ShapedImageView/tree/master) [![](https://jitpack.io/v/cn.gavinliu/ShapedImageView.svg)](https://jitpack.io/#cn.gavinliu/ShapedImageView)
+[![Action](https://action-badges.now.sh/gavinliu/ShapedImageView)](https://github.com/gavinliu/ShapedImageView/actions) [![](https://jitpack.io/v/cn.gavinliu/ShapedImageView.svg)](https://jitpack.io/#cn.gavinliu/ShapedImageView)
 
 * Support ``circle`` & ``round rect`` shaped
 * Support ``stroke``
