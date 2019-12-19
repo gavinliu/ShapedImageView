@@ -36,7 +36,7 @@ dependencies {
 
 ### Circle
 
-```java
+```xml
 <cn.gavinliu.android.lib.shapedimageview.ShapedImageView
     ...
     app:shape_mode="circle"
@@ -47,7 +47,7 @@ dependencies {
 
 ### Round Rect
 
-```java
+```xml
 <cn.gavinliu.android.lib.shapedimageview.ShapedImageView
     ...
     app:shape_mode="round_rect"
@@ -73,7 +73,7 @@ class CDPathExtension implements ShapedImageView.PathExtension {
 }
 ```
 
-### Java Api
+### Programmatically
 
 ```java
 
@@ -98,4 +98,6 @@ public void setStrokeWidth(float strokeWidth);
 
 ## License
 
-MIT
+The MIT License
+
+Copyright (c) 2016-present, GavinLiu
