@@ -1,7 +1,10 @@
 package cn.gavinliu.android.lib.shapedimageview.demo;
 
+import android.graphics.Color;
 import android.graphics.Path;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import cn.gavinliu.android.lib.shapedimageview.ShapedImageView;
 
@@ -25,7 +29,7 @@ public class ListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list);
+        RecyclerView recyclerView = findViewById(R.id.list);
         if (recyclerView != null) {
             recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
             recyclerView.setAdapter(new Adapter());
@@ -35,18 +39,20 @@ public class ListActivity extends AppCompatActivity {
 
     class Adapter extends RecyclerView.Adapter<ViewHolder> {
 
+        @NonNull
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new ViewHolder(LayoutInflater.from(ListActivity.this).inflate(R.layout.item_list, null));
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return new ViewHolder(LayoutInflater.from(ListActivity.this).inflate(R.layout.item_list, parent, false));
         }
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             String url = "http://img.xiami.net/images/album/img48/3048/3714265921440496645.jpg";
-            int imageSize = getResources().getDimensionPixelSize(R.dimen.image_size);
+
             Glide.with(ListActivity.this).load(url)
-                    .override(imageSize, imageSize)
                     .centerCrop()
+                    .placeholder(new ColorDrawable(Color.GRAY))
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(holder.mImageView);
         }
 
@@ -62,7 +68,7 @@ public class ListActivity extends AppCompatActivity {
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mImageView = (ShapedImageView) itemView.findViewById(R.id.image);
+            mImageView = itemView.findViewById(R.id.image);
             mImageView.setExtension(new CDPathExtension());
         }
 
