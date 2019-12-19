@@ -9,7 +9,12 @@
 
 ## Screenshots
 
-![](/screenshots1.png) ![](/screenshots2.png)
+
+| Demo Preview | PathExtension Preview |
+|------------------------|:----------------------:|
+| ![](/screenshots1.png) | ![](/screenshots2.png) |
+
+
 
 ## Usage
 
@@ -76,7 +81,6 @@ class CDPathExtension implements ShapedImageView.PathExtension {
 ### Programmatically
 
 ```java
-
 public void setShape(int shapeMode, float radius);
 
 public void setShapeMode(int shapeMode); // SHAPE_MODE_ROUND_RECT | SHAPE_MODE_CIRCLE
@@ -88,13 +92,11 @@ public void setStroke(int strokeColor, float strokeWidth);
 public void setStrokeColor(int strokeColor);
 
 public void setStrokeWidth(float strokeWidth);
-
-
 ```
 
 ## TODO
 
-* Support Any Shape (SVG to PathShape)
+- [ ] Support Any Shape (SVG to PathShape)
 
 ## License
 
