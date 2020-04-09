@@ -145,7 +145,10 @@ public class ShapedImageView extends ImageView {
                 if (mShapeBitmap == null || mShapeBitmap.isRecycled()) {
                     makeShapeBitmap();
                 }
-                canvas.drawBitmap(mShapeBitmap, 0, 0, mPaint);
+
+                if (mShapeBitmap != null && !mShapeBitmap.isRecycled()) {
+                    canvas.drawBitmap(mShapeBitmap, 0, 0, mPaint);
+                }
                 break;
         }
         canvas.restoreToCount(saveLayers);
