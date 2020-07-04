@@ -1,6 +1,6 @@
 # ShapedImageView
 
-[![Action](https://action-badges.now.sh/gavinliu/ShapedImageView)](https://github.com/gavinliu/ShapedImageView/actions) [![](https://jitpack.io/v/cn.gavinliu/ShapedImageView.svg)](https://jitpack.io/#cn.gavinliu/ShapedImageView)
+![Android CI](https://github.com/gavinliu/ShapedImageView/workflows/Android%20CI/badge.svg) [![](https://jitpack.io/v/cn.gavinliu/ShapedImageView.svg)](https://jitpack.io/#cn.gavinliu/ShapedImageView)
 
 * Support ``circle`` & ``round rect`` shaped
 * Support ``stroke``
