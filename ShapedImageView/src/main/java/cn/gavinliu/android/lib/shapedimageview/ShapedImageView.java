@@ -120,7 +120,12 @@ public class ShapedImageView extends ImageView {
     @Override
     protected void onDraw(Canvas canvas) {
         int saveLayers = canvas.saveLayer(0, 0, getMeasuredWidth(), getMeasuredHeight(), null, Canvas.ALL_SAVE_FLAG);
-        super.onDraw(canvas);
+
+        try {
+            super.onDraw(canvas);
+        } catch (Throwable throwable) {
+
+        }
 
         if (mStrokeWidth > 0 && mStrokeShape != null) {
             if (mStrokeBitmap == null || mStrokeBitmap.isRecycled()) {
