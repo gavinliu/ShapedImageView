@@ -24,6 +24,7 @@ public class ShapedImageView extends ImageView {
 
     private int mShapeMode = SHAPE_MODE_ROUND_RECT;
     private float mRadius = 0;
+    private float mInnerRadius = 0;
     private int mStrokeColor = 0x26000000;
     private float mStrokeWidth = 0;
     private boolean mShapeChanged;
@@ -59,6 +60,7 @@ public class ShapedImageView extends ImageView {
             TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ShapedImageView);
             mShapeMode = a.getInt(R.styleable.ShapedImageView_shape_mode, SHAPE_MODE_ROUND_RECT);
             mRadius = a.getDimension(R.styleable.ShapedImageView_round_radius, 0);
+            mInnerRadius = a.getDimension(R.styleable.ShapedImageView_inner_radius, 0);
 
             mStrokeWidth = a.getDimension(R.styleable.ShapedImageView_stroke_width, 0);
             mStrokeColor = a.getColor(R.styleable.ShapedImageView_stroke_color, mStrokeColor);
@@ -96,14 +98,24 @@ public class ShapedImageView extends ImageView {
                 case SHAPE_MODE_CIRCLE:
                     int min = Math.min(width, height);
                     mRadius = (float) min / 2;
+                    mInnerRadius = (float) min / 2;
                     break;
             }
 
             if (mShape == null || mRadius != 0) {
                 float[] radius = new float[8];
+                float[] innerRadius = new float[8];
+
                 Arrays.fill(radius, mRadius);
                 mShape = new RoundRectShape(radius, null, null);
-                mStrokeShape = new RoundRectShape(radius, null, null);
+
+                if (mInnerRadius != 0) {
+                    Arrays.fill(innerRadius, mInnerRadius);
+                } else {
+                    innerRadius = radius;
+                }
+
+                mStrokeShape = new RoundRectShape(innerRadius, null, null);
             }
             mShape.resize(width, height);
             mStrokeShape.resize(width - mStrokeWidth * 2, height - mStrokeWidth * 2);
@@ -240,12 +252,13 @@ public class ShapedImageView extends ImageView {
         setStroke(mStrokeColor, strokeWidth);
     }
 
-    public void setShape(int shapeMode, float radius) {
-        mShapeChanged = mShapeMode != shapeMode || mRadius != radius;
+    public void setShape(int shapeMode, float radius, float innerRadius) {
+        mShapeChanged = mShapeMode != shapeMode || mRadius != radius || mInnerRadius != innerRadius;
 
         if (mShapeChanged) {
             mShapeMode = shapeMode;
             mRadius = radius;
+            mInnerRadius = innerRadius;
 
             mShape = null;
             mStrokeShape = null;
@@ -254,11 +267,15 @@ public class ShapedImageView extends ImageView {
     }
 
     public void setShapeMode(int shapeMode) {
-        setShape(shapeMode, mRadius);
+        setShape(shapeMode, mRadius, mInnerRadius);
     }
 
     public void setShapeRadius(float radius) {
-        setShape(mShapeMode, radius);
+        setShape(mShapeMode, radius, mInnerRadius);
+    }
+
+    public void setInnerRadius(float innerRadius) {
+        setShape(mShapeMode, mRadius, innerRadius);
     }
 
     public interface PathExtension {
