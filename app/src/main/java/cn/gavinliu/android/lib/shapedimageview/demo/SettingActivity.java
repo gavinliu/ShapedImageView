@@ -37,11 +37,11 @@ public class SettingActivity extends AppCompatActivity {
 
 
     public void round(View view) {
-        mShapedImageView.setShape(ShapedImageView.SHAPE_MODE_ROUND_RECT, 50);
+        mShapedImageView.setShape(ShapedImageView.SHAPE_MODE_ROUND_RECT, 50,50);
     }
 
     public void circle(View view) {
-        mShapedImageView.setShape(ShapedImageView.SHAPE_MODE_CIRCLE, 50);
+        mShapedImageView.setShape(ShapedImageView.SHAPE_MODE_CIRCLE, 50,50);
     }
 
     public void radius(View view) {
