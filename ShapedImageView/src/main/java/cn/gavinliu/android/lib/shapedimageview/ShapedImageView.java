@@ -204,6 +204,8 @@ public class ShapedImageView extends ImageView {
     }
 
     private void makeShapeBitmap() {
+        if (mShape == null) return;
+
         int w = getMeasuredWidth();
         int h = getMeasuredHeight();
 
