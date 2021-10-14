@@ -226,7 +226,7 @@ public class ShapedImageView extends ImageView {
     }
 
     public void setStroke(int strokeColor, float strokeWidth) {
-        if (mStrokeWidth <= 0) return;
+        if (strokeWidth < 0) return;
 
         if (mStrokeWidth != strokeWidth) {
             mStrokeWidth = strokeWidth;
