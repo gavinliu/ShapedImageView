@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import cn.gavinliu.android.lib.shapedimageview.ShapedImageView;
 
@@ -20,7 +21,12 @@ public class SettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        mShapedImageView = (ShapedImageView) findViewById(R.id.image1);
+        mShapedImageView = new ShapedImageView(this);
+        mShapedImageView.setImageResource(R.drawable.an);
+        mShapedImageView.setStroke(0xFF9999FF, 35);
+
+        FrameLayout frameLayout = findViewById(R.id.frameLayout);
+        frameLayout.addView(mShapedImageView);
     }
 
     public void stroke(View view) {
@@ -35,13 +41,12 @@ public class SettingActivity extends AppCompatActivity {
         mShapedImageView.setStrokeColor(getResources().getColor(R.color.colorAccent));
     }
 
-
     public void round(View view) {
-        mShapedImageView.setShape(ShapedImageView.SHAPE_MODE_ROUND_RECT, 50,50);
+        mShapedImageView.setShape(ShapedImageView.SHAPE_MODE_ROUND_RECT, 50, 50);
     }
 
     public void circle(View view) {
-        mShapedImageView.setShape(ShapedImageView.SHAPE_MODE_CIRCLE, 50,50);
+        mShapedImageView.setShape(ShapedImageView.SHAPE_MODE_CIRCLE, 50, 50);
     }
 
     public void radius(View view) {

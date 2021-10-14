@@ -1,60 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <cn.gavinliu.android.lib.shapedimageview.ShapedImageView
-        android:id="@+id/image1"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/an"
-        app:shape_mode="circle"
-        app:stroke_color="#009688"
-        app:stroke_width="3dp"/>
-
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="300dp"
+        android:layout_height="300dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="stroke"
-        android:text="stroke"/>
+        android:text="stroke" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="strokeWidth"
-        android:text="stroke_width"/>
+        android:text="stroke_width" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="strokeColor"
-        android:text="stroke_color"/>
+        android:text="stroke_color" />
 
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="round"
-        android:text="round"/>
+        android:text="round" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="circle"
-        android:text="circle"/>
+        android:text="circle" />
 
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="radius"
-        android:text="Radius"/>
+        android:text="Radius" />
 
 </LinearLayout>

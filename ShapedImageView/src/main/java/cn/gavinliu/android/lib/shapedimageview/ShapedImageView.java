@@ -231,11 +231,14 @@ public class ShapedImageView extends ImageView {
         if (mStrokeWidth != strokeWidth) {
             mStrokeWidth = strokeWidth;
 
-            int width = getMeasuredWidth();
-            int height = getMeasuredHeight();
-            mStrokeShape.resize(width - mStrokeWidth * 2, height - mStrokeWidth * 2);
-
-            postInvalidate();
+            if (mStrokeShape == null) {
+                requestLayout();
+            } else {
+                int width = getMeasuredWidth();
+                int height = getMeasuredHeight();
+                mStrokeShape.resize(width - mStrokeWidth * 2, height - mStrokeWidth * 2);
+                postInvalidate();
+            }
         }
 
         if (mStrokeColor != strokeColor) {
